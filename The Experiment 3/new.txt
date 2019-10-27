@@ -1,0 +1,3 @@
+Directory scan of .
+.vscode/
+    settings.json

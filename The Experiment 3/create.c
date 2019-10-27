@@ -4,9 +4,10 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-20 14:50:31
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-24 20:11:18
+ * @LastEditTime: 2019-10-25 21:23:54
  */
 #include "apue.h"
+#include <fcntl.h>
 #include <stdlib.h>
 #define BUFFSIZE 4096
 
