@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-25 16:46:36
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-27 14:12:35
+ * @LastEditTime: 2019-10-27 16:42:04
  */
 #include <unistd.h>  
 #include <stdio.h>  
@@ -19,7 +19,7 @@
 void printdir(char *dir, int depth)  
 {  
     int fd;
-    if((fd = open("Backup.txt", O_APPEND|O_RDWR|O_CREAT|O_TRUNC,0777)) < 0)
+    if((fd = open("BackUp.txt", O_APPEND|O_RDWR|O_CREAT|O_TRUNC,0777)) < 0)
         err_sys("creat error");
 
     DIR *dp;  
