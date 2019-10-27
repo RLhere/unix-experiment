@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-27 17:59:23
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-27 18:18:17
+ * @LastEditTime: 2019-10-27 23:07:32
  */
 #include<fcntl.h>
 #include"apue.h"
@@ -27,8 +27,14 @@ int main(int argc, char const *argv[])
         err_sys("read error");
     else
     {
-        // printf("%s\n",buf);
-
+        printf("%s\n",buf);
+        int linecount = 1;
+        for(int i = 0;i < statbuf.st_size;i++)
+        {
+            if(buf[i] == '\n')
+                linecount += 1;
+        }
+        printf("%d\n",linecount);
     }
     
     return 0;

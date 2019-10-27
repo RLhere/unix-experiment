@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-25 16:46:36
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-27 18:35:50
+ * @LastEditTime: 2019-10-27 23:10:50
  */
 #include <unistd.h>
 #include <stdio.h>
@@ -40,13 +40,13 @@ void printdir(char *dir, int depth)
                 continue;
 
             printf("%*s%s/", depth, "", entry->d_name);
-            printf("\t atime: %ld\t ctime: %ld\t dev: %ld\t gid: %d\t ino: %ld\t mode: %d\t mtime: %ld\t nlink: %ld\t rdev: %ld\t size: %ld\t uid: %d\n", statbuf.st_atime, statbuf.st_ctime,statbuf.st_dev,statbuf.st_gid,statbuf.st_ino,statbuf.st_mode,statbuf.st_mtime,statbuf.st_nlink,statbuf.st_rdev,statbuf.st_size,statbuf.st_uid);
+            printf("\tatime:%ld\tctime:%ld\tdev:%ld\tgid:%d\tino:%ld\tmode:%d\tmtime:%ld\tnlink:%ld\trdev:%ld\tsize:%ld\tuid:%d\n", statbuf.st_atime, statbuf.st_ctime,statbuf.st_dev,statbuf.st_gid,statbuf.st_ino,statbuf.st_mode,statbuf.st_mtime,statbuf.st_nlink,statbuf.st_rdev,statbuf.st_size,statbuf.st_uid);
             printdir(entry->d_name, depth + 4);
         }
         else
         {
             printf("%*s%s", depth, "", entry->d_name);
-            printf("\t atime: %ld\t ctime: %ld\t dev: %ld\t gid: %d\t ino: %ld\t mode: %d\t mtime: %ld\t nlink: %ld\t rdev: %ld\t size: %ld\t uid: %d\t", statbuf.st_atime, statbuf.st_ctime,statbuf.st_dev,statbuf.st_gid,statbuf.st_ino,statbuf.st_mode,statbuf.st_mtime,statbuf.st_nlink,statbuf.st_rdev,statbuf.st_size,statbuf.st_uid);
+            printf("\tatime:%ld\tctime:%ld\tdev:%ld\tgid:%d\tino:%ld\tmode:%d\tmtime:%ld\tnlink:%ld\trdev:%ld\tsize:%ld\tuid:%d\t", statbuf.st_atime, statbuf.st_ctime,statbuf.st_dev,statbuf.st_gid,statbuf.st_ino,statbuf.st_mode,statbuf.st_mtime,statbuf.st_nlink,statbuf.st_rdev,statbuf.st_size,statbuf.st_uid);
             int fd;
             if((fd = open(entry->d_name,FILE_MODE,0777))<0)
                 err_sys("open error");
