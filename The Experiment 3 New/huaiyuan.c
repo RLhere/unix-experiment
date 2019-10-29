@@ -1,15 +1,27 @@
 /*
- * @Description: 
- * @Version: 
+ * @Description: the back part of the file backup
+ * @Version: 2.0
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-30 00:46:40
+ * @LastEditTime: 2019-10-30 01:16:15
  */
 #include "apue.h"
 
 int main(int argc, char const *argv[])
 {
+    /**
+     * @description: change the topdir where backup the file
+     * @param { the number of parameters, the dir where backup the file } 
+     * @return: not a function, a statement of operations
+     * @author: Kevin Liu
+     */
+    if( argc == 2 )
+    {
+        if( (chdir(argv[1]) < 0 )
+            err_sys("change dir error");
+    }
+
     /**
      * @description: read the entile backup document
      * @param {the stat of the document, a buf which receives the all content in document} 
