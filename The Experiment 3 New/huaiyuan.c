@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-30 03:28:29
+ * @LastEditTime: 2019-10-30 05:08:33
  */
 #include "apue.h"
 
@@ -86,6 +86,23 @@ int main(int argc, char const *argv[])
     free(Document);
     Document = NULL;
 
+    /**
+     * @description: get attr from every singlelines
+     * @param {pointers to all single lines, Ftypes 1 mean dir and 0 mean regular file, indent which links to the change of dir, linenumber } 
+     * @return: change value through pointer
+     * @author: Kevin Liu
+     */
+    void getattr(char ** ALLines, unsigned short * Ftype,short ** indent, int * linenumber,int * Len);
+    unsigned short * Ftype = (unsigned short *)malloc((*linenumber)*sizeof(unsigned short));
+    int * Len = (int *)malloc((*linenumber)*sizeof(int));
+    short ** indent = (short **)malloc((*linenumber)*sizeof(short*));
+    for(int i = 0;i < (*linenumber);i++)
+    {
+        indent[i] = (short*)malloc(3*sizeof(short));
+        Len[i] = length[i];
+    }
+    getattr(ALLines,Ftype,indent,linenumber,Len);
+
     return 0;
 }
 
@@ -95,5 +112,70 @@ void countlines(char * form_Documnet,long int doc_size,int * linenumber)
     {
         if(form_Documnet[i] == '\n')
             (*linenumber)++;
+    }
+}
+
+void getattr(char ** ALLines, unsigned short * Ftype,short ** indent,int * linenumber,int * Len)
+{
+    for(int i = 0;i < (*linenumber);i++)
+    {
+        indent[i][0] = 0;
+        indent[i][1] = 0;
+        indent[i][2] = 0;
+        for(int j = 0;j < Len[i]; j++)
+        {
+            if(ALLines[i][0]==' ')
+            {
+                if(i != 0 && i != 1)
+                {
+                    indent[i][1] = 0;
+                    indent[i][0] = indent[i-1][1];
+                }else if(i == 1){
+                    indent[i][1] = 0;
+                    indent[i][0] = 0;
+                }else{
+                    indent[i][0] = 0;
+                    indent[i][1] = 0;
+                }
+            }
+            if(ALLines[i][4]==' ')
+            {
+                if(i != 0 && i != 1)
+                {
+                    indent[i][1] = 1;
+                    indent[i][0] = indent[i-1][1];
+                }else if(i == 1){
+                    indent[i][1] = 0;
+                    indent[i][0] = 0;
+                }else{
+                    indent[i][0] = 0;
+                    indent[i][1] = 0;
+                }
+            }
+            if(ALLines[i][8]==' ')
+            {
+                if(i != 0 && i != 1)
+                {
+                    indent[i][1] = 2;
+                    indent[i][0] = indent[i-1][1];
+                }else if(i == 1){
+                    indent[i][1] = 0;
+                    indent[i][0] = 0;
+                }else{
+                    indent[i][0] = 0;
+                    indent[i][1] = 0;
+                }
+            }
+
+            if(ALLines[i][j] == '/')
+            {
+                Ftype[i] = 1;
+            }
+            else
+            {
+                Ftype[i] = 0;
+            }
+        }
+        indent[i][2] = indent[i][1] - indent[i][0];
     }
 }
