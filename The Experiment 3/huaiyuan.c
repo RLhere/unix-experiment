@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-27 17:59:23
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-29 21:19:33
+ * @LastEditTime: 2019-10-29 22:48:23
  */
 #include"apue.h"
 
@@ -34,8 +34,8 @@ int main(int argc, char const *argv[])
     attribute[3] = "uid:";
     attribute[4] = "content:";
 
-    // int checktype(char *curline,int begin,int end);
-    // void create(int type,char * curline,int begin,int end,int *attr);
+    int checktype(char *curline,int begin,int end);
+    void create(int type,char * curline,int begin,int end,int *attr);
 
     lstat("./BackUp.txt",statbuf);
     char buf[(*statbuf).st_size];
@@ -157,19 +157,19 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-// int checktype(char* curline,int begin,int end)
-// {
-//     // printf("%s",curline);//for check
-//     for(int i = 0;i < end - begin + 1;i++)
-//     {
-//         // printf("%c",curline[i]);
-//         if(curline[i]=='/')
-//         {
-//             return 1;
-//         }
-//     }
-//     return 0;
-// }
+int checktype(char* curline,int begin,int end)
+{
+    printf("%s",curline);//for check
+    // for(int i = 0;i < end - begin + 1;i++)
+    // {
+    //     // printf("%c",curline[i]);
+    //     if(curline[i]=='/')
+    //     {
+    //         return 1;
+    //     }
+    // }
+    return 0;
+}
 
 // void create(int type,char * curline,int begin,int end,int * attr)
 // {
