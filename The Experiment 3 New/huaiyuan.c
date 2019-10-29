@@ -4,13 +4,18 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-30 00:05:58
+ * @LastEditTime: 2019-10-30 00:46:40
  */
 #include "apue.h"
 
 int main(int argc, char const *argv[])
 {
-    //读取整个文档
+    /**
+     * @description: read the entile backup document
+     * @param {the stat of the document, a buf which receives the all content in document} 
+     * @return: not a function, is a statement of operation
+     * @author: Kevin Liu
+     */
     struct stat statbuf;
     lstat("./BackUp.txt",&statbuf);
     char * Document = (char *)malloc((statbuf.st_size * sizeof(char)));
@@ -20,19 +25,25 @@ int main(int argc, char const *argv[])
     if(read( fd, Document,statbuf.st_size) < 0)
         err_sys("read error");
 
-    void Curline(char * form_Document,long int doc_Size,char * cur_line,int * inDent,int * fileType,int * attribute,int * curline);
     /**
-     * @description: 根据传入参数将每行分开存储  获取每行缩进  获取每行记录文件类型  属性  简而言之提取信息
-     * @param {char*,long int,char*,int*,int*,int*,int*} 
-     * @return: void
+     * @description: count lines of the document
+     * @param {the document , nbytes of the document, linenumber of the document} 
+     * @return: no return  change the value through the pointer
      * @author: Kevin Liu
-     */    
-    // Curline( Document, statbuf.st_size,)
+     */
+    void countlines(char * form_Documnet,long int doc_size,int * linenumber);
+    int * linenumber = (int *)malloc(sizeof(int));
+    *linenumber = 1;
+    countlines( Document, statbuf.st_size, linenumber);
 
     return 0;
 }
 
-void Curline(char * form_Document,long int doc_Size,char * cur_line,int * inDent,int * fileType,int * attribute,int * curline)
+void countlines(char * form_Documnet,long int doc_size,int * linenumber)
 {
-
+    for(int i = 0;i < doc_size;i++)
+    {
+        if(form_Documnet[i] == '\n')
+            (*linenumber)++;
+    }
 }
