@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-30 05:08:33
+ * @LastEditTime: 2019-10-30 05:17:16
  */
 #include "apue.h"
 
@@ -102,6 +102,8 @@ int main(int argc, char const *argv[])
         Len[i] = length[i];
     }
     getattr(ALLines,Ftype,indent,linenumber,Len);
+    //以上getattr获取了两样东西一个该行代表文件的类型，另一个是该行对于上一行
+    //的层次关系标识符
 
     return 0;
 }
