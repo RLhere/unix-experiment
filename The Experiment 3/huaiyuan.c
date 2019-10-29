@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-27 17:59:23
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-29 22:48:23
+ * @LastEditTime: 2019-10-30 02:47:01
  */
 #include"apue.h"
 
@@ -55,7 +55,7 @@ int main(int argc, char const *argv[])
             if(buf[i] == '\n')//检测到换行
             {
                 line++;
-                // printf("%d",line);
+                printf("%d",line);
                 if(curlineend != 0)
                 {
                     prelineend = curlineend;

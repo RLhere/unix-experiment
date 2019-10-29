@@ -1,0 +1,1 @@
+Directory scan of ./sources/		gid:1000	mode:16895	size:4096	uid:1000
