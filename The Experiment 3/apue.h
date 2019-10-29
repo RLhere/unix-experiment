@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-20 14:51:07
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-22 18:51:59
+ * @LastEditTime: 2019-10-29 15:22:18
  */
 /*
  * Our own header, to be included before all standard system headers.
@@ -260,3 +260,9 @@ err_doit(int errnoflag, int error, const char *fmt, va_list ap)
    fputs(buf, stderr);
    fflush(NULL); /* flushes all stdio output streams */
 }
+
+#include<fcntl.h>
+#include<malloc.h>
+#include <dirent.h>
+#include<time.h>
+#define BUFFSIZE 4096

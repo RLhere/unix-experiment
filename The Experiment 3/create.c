@@ -4,18 +4,19 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-20 14:50:31
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-25 21:23:54
+ * @LastEditTime: 2019-10-29 15:26:36
  */
 #include "apue.h"
-#include <fcntl.h>
-#include <stdlib.h>
-#define BUFFSIZE 4096
 
 int main(int argc, char const *argv[])
 {
+    srand(time(NULL));
     char name[BUFFSIZE];
     char buf[BUFFSIZE];
     int fd;
+
+    if(argc == 2)
+        chdir(argv[1]);
 
     if ((mkdir("sources", 0777)) < 0)
         err_sys("mkdir error");
@@ -29,7 +30,11 @@ int main(int argc, char const *argv[])
         {
             name[ji] = 'a' + rand() % 26;
         }
-        mkdir(name, 0777);
+        if(mkdir(name, 0777) < 0)
+        {
+            i = i - 1;
+            continue;
+        }
         chdir(name);
         for (int j = 0; j < 5; j++)
         {
