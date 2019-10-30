@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-30 19:55:54
+ * @LastEditTime: 2019-10-30 23:45:54
  */
 #include "apue.h"
 
@@ -511,7 +511,7 @@ void getattri(char ** ALLines, unsigned short * Ftype,char ** Gid,int * FnameLen
                 }
             }
             Fnamebegin[0] = temp[1] + 1;
-            FnameLen[0] = temp[0] - temp[1];
+            FnameLen[0] = temp[0] - temp[1] - 1;
         }
         if(Ftype[i] == 0)
         {
