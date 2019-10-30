@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-25 16:46:36
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-29 14:05:15
+ * @LastEditTime: 2019-10-30 20:26:42
  */
 #include "apue.h"
 
@@ -48,7 +48,8 @@ void printdir(char *dir, int depth)
                 err_sys("read error");
             }else
             {
-                printf("content:\t%s\n",buf);
+                buf[statbuf.st_size] = '\0';
+                printf("content:SU%s\n",buf);
             }
             
         }

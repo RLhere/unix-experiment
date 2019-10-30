@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-30 05:17:16
+ * @LastEditTime: 2019-10-30 19:55:54
  */
 #include "apue.h"
 
@@ -92,7 +92,7 @@ int main(int argc, char const *argv[])
      * @return: change value through pointer
      * @author: Kevin Liu
      */
-    void getattr(char ** ALLines, unsigned short * Ftype,short ** indent, int * linenumber,int * Len);
+    void setattr(char ** ALLines, unsigned short * Ftype,short ** indent, int * linenumber,int * Len);
     unsigned short * Ftype = (unsigned short *)malloc((*linenumber)*sizeof(unsigned short));
     int * Len = (int *)malloc((*linenumber)*sizeof(int));
     short ** indent = (short **)malloc((*linenumber)*sizeof(short*));
@@ -101,9 +101,99 @@ int main(int argc, char const *argv[])
         indent[i] = (short*)malloc(3*sizeof(short));
         Len[i] = length[i];
     }
-    getattr(ALLines,Ftype,indent,linenumber,Len);
+    setattr(ALLines,Ftype,indent,linenumber,Len);
+    Ftype[0] = 1;
+    // for(int i = 0;i < (*linenumber);i++)
+    // {
+    //     printf("%d\n",Ftype[i]);
+    // }
+
     //以上getattr获取了两样东西一个该行代表文件的类型，另一个是该行对于上一行
     //的层次关系标识符
+
+    /**
+     * @description: get gid uid  where the filename begin and how long it is and the size of the content and where the content begin
+     * @param {lines,file type which lines represent,file gid, filenamelenth, filename where begin, file uid, filesize, where file content begin} 
+     * @return: change values through pointers
+     * @author: Kevin Liu
+     */
+    void getattr(char ** ALLines, unsigned short * Ftype,char ** Gid,int * FnameLen,int * Fnamebegin,char ** Uid,unsigned short * Fsize,unsigned short * ContentBegin,int * linenumber,int * Len,char ** Mode);
+    char ** Gid = (char **)malloc((*linenumber)*sizeof(char *));
+    char ** Uid = (char **)malloc((*linenumber)*sizeof(char *));
+    int * FnameLen = (int *)malloc((*linenumber)*sizeof(int));
+    int * Fnamebegin = (int *)malloc((*linenumber)*sizeof(int));
+    char ** Mode = (char **)malloc((*linenumber)*sizeof(char *));
+    unsigned short * Fsize = (unsigned short *)malloc((*linenumber)*sizeof(unsigned short));
+    unsigned short * ContentBegin = (unsigned short *)malloc((*linenumber)*sizeof(unsigned short));
+    for(int i = 0;i < (*linenumber);i++)
+    {
+        Mode[i] = (char *)malloc(5*sizeof(char));
+        Gid[i] = (char *)malloc(4*sizeof(char));
+        Uid[i] = (char *)malloc(4*sizeof(char));
+    }
+    getattr(ALLines, Ftype, Gid, FnameLen,Fnamebegin,Uid,Fsize,ContentBegin,linenumber,Len,Mode);
+    Fsize[(*linenumber) - 1] = 0;
+    Fsize[(*linenumber) - 2] = 0;
+
+    void getattri(char ** ALLines, unsigned short * Ftype,char ** Gid,int * FnameLen,int * Fnamebegin,char ** Uid,unsigned short * Fsize,unsigned short * ContentBegin,int * linenumber,int * Len,char ** Mode);
+    getattri(ALLines, Ftype, Gid, FnameLen,Fnamebegin,Uid,Fsize,ContentBegin,linenumber,Len,Mode);
+    // debug
+    for(int i = 0;i < (*linenumber);i++)
+    {
+        Uid[i][4] = '\0';
+        Gid[i][4] = '\0';
+        // printf("%d\t%d\t%d\n",i+1,Fnamebegin[i],FnameLen[i]);
+        printf("%d\t%hd\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\n",i+1,Fsize[i],Gid[i],Uid[i],Mode[i],Ftype[i],Fnamebegin[i],FnameLen[i],indent[i][2],ContentBegin[i]);
+    }
+
+    char** name    = (char**)malloc((*linenumber)*sizeof(char*));
+    char** content = (char**)malloc((*linenumber)*sizeof(char*));
+    for(int i = 0;i < (*linenumber);i++)
+    {
+        content[i] = (char*)malloc(Fsize[i]*sizeof(char));
+        name[i]    = (char*)malloc(FnameLen[i]*sizeof(char));
+    }
+    
+
+    for(int i = 1; i < (*linenumber) - 2;i++)
+    {
+        if(indent[i][2] == 1)
+        {
+            if(Ftype[i]==1)
+            {
+                
+            }
+            else
+            {
+                /* code */
+            }
+            
+        }
+        else if(indent[i][2] == 0)
+        {
+            if(Ftype[i]==1)
+            {
+
+            }
+            else
+            {
+                /* code */
+            }
+        }
+        else
+        {
+            if(Ftype[i]==1)
+            {
+
+            }
+            else
+            {
+                /* code */
+            }
+            
+        }
+        
+    }
 
     return 0;
 }
@@ -117,7 +207,7 @@ void countlines(char * form_Documnet,long int doc_size,int * linenumber)
     }
 }
 
-void getattr(char ** ALLines, unsigned short * Ftype,short ** indent,int * linenumber,int * Len)
+void setattr(char ** ALLines, unsigned short * Ftype,short ** indent,int * linenumber,int * Len)
 {
     for(int i = 0;i < (*linenumber);i++)
     {
@@ -168,16 +258,279 @@ void getattr(char ** ALLines, unsigned short * Ftype,short ** indent,int * linen
                     indent[i][1] = 0;
                 }
             }
-
+        }
+        indent[i][2] = indent[i][1] - indent[i][0];
+        for(int j = 0;j < Len[i]; j++)
+        {
             if(ALLines[i][j] == '/')
             {
                 Ftype[i] = 1;
+                break;
             }
             else
             {
                 Ftype[i] = 0;
             }
         }
-        indent[i][2] = indent[i][1] - indent[i][0];
+    }
+}
+
+void getattr(char ** ALLines, unsigned short * Ftype,char ** Gid,int * FnameLen,int * Fnamebegin,char ** Uid,unsigned short * Fsize,unsigned short * ContentBegin, int * linenumber, int * Len,char ** Mode)
+{
+    for(int i = 0; i < *linenumber;i++)
+    {
+        if(i == 0)
+        {
+            int end;
+            int begin;
+            int times = 0;
+            for(int j = Len[i] - 1; j > -1; j--)
+            {
+                if(ALLines[i][j] == '/')
+                {
+                    times++;
+                    if(times == 1)
+                    {
+                        end = i - 1;
+                    }
+                    if(times == 2)
+                    {
+                        begin = i + 1;
+                    }
+                }
+                Fnamebegin[i] = begin;
+                FnameLen[i] = end - begin + 1;
+            }
+            for(int j = 0; j < Len[i]; j++)
+            {
+                if(ALLines[i][j] == 'g' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == ':')
+                {
+                    int k = 0;
+                    for(int l = j + 4;k < 4;k++,l++)
+                    {
+                        Gid[i][k] = ALLines[i][l];
+                    } 
+                }
+                if(ALLines[i][j] == 'u' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == ':')
+                {
+                    int k = 0;
+                    for(int l = j + 4;k < 4;k++,l++)
+                    {
+                        Uid[i][k] = ALLines[i][l];
+                    } 
+                }
+                if(ALLines[i][j] == 'm' && ALLines[i][j+1] == 'o' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == 'e' && ALLines[i][j + 4] == ':')
+                {
+                    int k = 0;
+                    for(int l = j + 5;k < 5;k++,l++)
+                    {
+                        Mode[i][k] = ALLines[i][l];
+                    } 
+                }
+                if(ALLines[i][j] == 's' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'z' && ALLines[i][j+3] == 'e' && ALLines[i][j + 4] == ':')
+                {
+                    int len = 1;
+                    int index = j + 4 + len;
+                    for(;;)
+                    {
+                        if(ALLines[i][index] != ' ')
+                        {
+                            len++;
+                            index = j + 4 + len;
+                        }else{
+                            break;
+                        }
+                    }
+                    char * cSize = (char*)malloc(len*sizeof(char));
+                    int k = 0;
+                    for(int l = j + 5;k < len;k++,l++)
+                    {
+                        cSize[k] = ALLines[i][l];
+                    }
+                    sscanf(cSize,"%hd",&Fsize[i]);
+                }
+            }
+        }
+        else
+        {
+            if(Ftype[i] == 1)
+            {
+                for(int j = 0; j < Len[i]; j++)
+                {
+                    int end;
+                    if(ALLines[i][j] == '/')
+                    {
+                        end = j - 1;
+                    }
+                    for(int m = end;;m--)
+                    {
+                        if(ALLines[i][m] == ' ')
+                        {
+                            Fnamebegin[i] = m + 1;
+                            FnameLen[i] = end - Fnamebegin[i] + 1; 
+                            break;
+                        }
+                    }
+                    if(ALLines[i][j] == 'g' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == ':')
+                    {
+                        int k = 0;
+                        for(int l = j + 4;k < 4;k++,l++)
+                        {
+                            Gid[i][k] = ALLines[i][l];
+                        } 
+                    }
+                    if(ALLines[i][j] == 'u' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == ':')
+                    {
+                        int k = 0;
+                        for(int l = j + 4;k < 4;k++,l++)
+                        {
+                            Uid[i][k] = ALLines[i][l];
+                        } 
+                    }
+                    if(ALLines[i][j] == 'm' && ALLines[i][j+1] == 'o' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == 'e' && ALLines[i][j + 4] == ':')
+                    {
+                        int k = 0;
+                        for(int l = j + 5;k < 5;k++,l++)
+                        {
+                            Mode[i][k] = ALLines[i][l];
+                        } 
+                    }
+                    if(ALLines[i][j] == 's' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'z' && ALLines[i][j+3] == 'e' && ALLines[i][j + 4] == ':')
+                    {
+                        int len = 1;
+                        int index = j + 4 + len;
+                        for(;;)
+                        {
+                            if(ALLines[i][index] != ' ')
+                            {
+                                len++;
+                                index = j + 4 + len;
+                            }else{
+                                break;
+                            }
+                        }
+                        char * cSize = (char*)malloc(len*sizeof(char));
+                        int k = 0;
+                        for(int l = j + 5;k < len;k++,l++)
+                        {
+                            cSize[k] = ALLines[i][l];
+                        }
+                        sscanf(cSize,"%hd",&Fsize[i]);
+                    }
+                }
+            }
+            if(Ftype[i] == 0)
+            {
+                for(int j = 0; j < Len[i]; j++)
+                {
+                    int end;
+                    if(ALLines[i][j] == '/')
+                    {
+                        end = j - 1;
+                    }
+                    for(int m = end;;m--)
+                    {
+                        if(ALLines[i][m] == ' ')
+                        {
+                            Fnamebegin[i] = m + 1;
+                            FnameLen[i] = end - Fnamebegin[i] + 1; 
+                            break;
+                        }
+                    }
+                    if(ALLines[i][j] == 'g' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == ':')
+                    {
+                        int k = 0;
+                        for(int l = j + 4;k < 4;k++,l++)
+                        {
+                            Gid[i][k] = ALLines[i][l];
+                        } 
+                    }
+                    if(ALLines[i][j] == 'u' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == ':')
+                    {
+                        int k = 0;
+                        for(int l = j + 4;k < 4;k++,l++)
+                        {
+                            Uid[i][k] = ALLines[i][l];
+                        } 
+                    }
+                    if(ALLines[i][j] == 'm' && ALLines[i][j+1] == 'o' && ALLines[i][j+2] == 'd' && ALLines[i][j+3] == 'e' && ALLines[i][j + 4] == ':')
+                    {
+                        int k = 0;
+                        for(int l = j + 5;k < 5;k++,l++)
+                        {
+                            Mode[i][k] = ALLines[i][l];
+                        } 
+                    }
+                    if(ALLines[i][j] == 's' && ALLines[i][j+1] == 'i' && ALLines[i][j+2] == 'z' && ALLines[i][j+3] == 'e' && ALLines[i][j + 4] == ':')
+                    {
+                        int len = 1;
+                        int index = j + 4 + len;
+                        for(;;)
+                        {
+                            if(ALLines[i][index] != ' ')
+                            {
+                                len++;
+                                index = j + 4 + len;
+                            }else{
+                                break;
+                            }
+                        }
+                        char * cSize = (char*)malloc(len*sizeof(char));
+                        int k = 0;
+                        for(int l = j + 5;k < len;k++,l++)
+                        {
+                            cSize[k] = ALLines[i][l];
+                        }
+                        sscanf(cSize,"%hd",&Fsize[i]);
+                    }
+                }
+            }
+        }        
+    }
+}
+
+void getattri(char ** ALLines, unsigned short * Ftype,char ** Gid,int * FnameLen,int * Fnamebegin,char ** Uid,unsigned short * Fsize,unsigned short * ContentBegin,int * linenumber,int * Len,char ** Mode)
+{
+    FnameLen[0] = 0;
+    for(int i = 0;i < (*linenumber);i++)
+    {
+        if(i == 0)
+        {
+            int time = 0;
+            int temp[2];
+            for(int j = Len[i]; j >= 0; j-- )
+            {
+                if(ALLines[i][j] == '/')
+                {
+                    time++;
+                    temp[time-1] = j;
+                    if(time==2)
+                    {
+                        break;
+                    }
+                }
+            }
+            Fnamebegin[0] = temp[1] + 1;
+            FnameLen[0] = temp[0] - temp[1];
+        }
+        if(Ftype[i] == 0)
+        {
+            for(int j = 0; j < Len[i];j++)
+            {
+                if(ALLines[i][j] != ' ' && ALLines[i][j + 1] == '\t')
+                {
+                    FnameLen[i] = j - Fnamebegin[i] + 1;
+                    break;
+                }
+            }
+
+            for(int j = 0; j < Len[i];j++)
+            {
+                if(ALLines[i][j]=='c'&&ALLines[i][j+1]=='o'&&ALLines[i][j+2]=='n'&&ALLines[i][j+3]=='t'&&ALLines[i][j+4]=='e'&&ALLines[i][j+5]=='n'&&ALLines[i][j+6]=='t'&&ALLines[i][j+7]==':')
+                {
+                    ContentBegin[i] = j+8;
+                }
+            }
+        }
     }
 }
