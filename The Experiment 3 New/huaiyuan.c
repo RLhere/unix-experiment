@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-30 23:45:54
+ * @LastEditTime: 2019-10-31 14:31:06
  */
 #include "apue.h"
 
@@ -143,20 +143,69 @@ int main(int argc, char const *argv[])
         Uid[i][4] = '\0';
         Gid[i][4] = '\0';
         // printf("%d\t%d\t%d\n",i+1,Fnamebegin[i],FnameLen[i]);
-        printf("%d\t%hd\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\n",i+1,Fsize[i],Gid[i],Uid[i],Mode[i],Ftype[i],Fnamebegin[i],FnameLen[i],indent[i][2],ContentBegin[i]);
+        // printf("%d\t%hd\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\n",i+1,Fsize[i],Gid[i],Uid[i],Mode[i],Ftype[i],Fnamebegin[i],FnameLen[i],indent[i][2],ContentBegin[i]);
     }
 
     char** name    = (char**)malloc((*linenumber)*sizeof(char*));
-    char** content = (char**)malloc((*linenumber)*sizeof(char*));
     for(int i = 0;i < (*linenumber);i++)
     {
-        content[i] = (char*)malloc(Fsize[i]*sizeof(char));
         name[i]    = (char*)malloc(FnameLen[i]*sizeof(char));
     }
-    
+
+    void getname(char ** ALLines, char ** name,int * linenumber,int * Fnamebegin,int * FnameLen);
+    getname(ALLines,name,linenumber,Fnamebegin,FnameLen);
+
+    void getcontent(char ** ALLines, char ** content, int * linenumber, unsigned short * ContentBegin,unsigned short * Fsize,unsigned short * Ftype);
+    // getcontent(ALLines,content,linenumber,ContentBegin,Fsize,Ftype);
+
+
+    char ** content = (char **)malloc((*linenumber)*sizeof(char *));
+    content[(*linenumber)-1] = (char*)malloc(sizeof(char));
+    content[(*linenumber)-2] = (char*)malloc(sizeof(char));
+    for(int i = 0; i < (*linenumber) -2; i ++)
+    {
+        content[i] = (char*)malloc(Fsize[i]*sizeof(char));
+        if(Ftype[i]==0)
+        {
+            int temp = 0;
+            for(int j = ContentBegin[i];j < ContentBegin[i] + Fsize[i]; j++)
+            {
+                content[i][temp++] = ALLines[i][j];//一旦加了这行就出现内存错误
+                // free(ALLines[i]);
+                // ALLines[i] = NULL;
+            }
+            // content[i][Fsize[i]]= '\0';
+            printf("%d\t%s\n",i+1,content[i]);
+        }
+        if(Ftype[i]==1)
+        {
+            content[i][0] = '\0';
+            printf("%d\t%s\n",i+1,content[i]);
+        }
+    }
+
+    free(ALLines);
+    ALLines=NULL;
+
+
+
+
+
+
+
+
+
+
+
+
 
     for(int i = 1; i < (*linenumber) - 2;i++)
     {
+        printf("%d\t%s\n",i+1,name[i]);
+        if(Ftype[i] == 0)
+        {
+            // printf("%d\t%s",i + 1,content[i]);
+        }
         if(indent[i][2] == 1)
         {
             if(Ftype[i]==1)
@@ -533,4 +582,22 @@ void getattri(char ** ALLines, unsigned short * Ftype,char ** Gid,int * FnameLen
             }
         }
     }
+}
+
+void getname(char ** ALLines, char ** name,int * linenumber,int * Fnamebegin,int * FnameLen)
+{
+    for(int i = 0; i < (*linenumber);i++)
+    {
+        int temp = 0;
+        for(int j = Fnamebegin[i];j < Fnamebegin[i] + FnameLen[i];j++)
+        {
+            name[i][temp++] = ALLines[i][j];
+        }
+        name[i][FnameLen[i]] = '\0';
+    }
+}
+
+void getcontent(char ** ALLines, char ** content, int * linenumber, unsigned short * ContentBegin,unsigned short * Fsize,unsigned short * Ftype)
+{
+    
 }
