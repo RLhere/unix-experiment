@@ -4,23 +4,12 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-31 14:31:06
+ * @LastEditTime: 2019-10-31 17:52:57
  */
 #include "apue.h"
 
 int main(int argc, char const *argv[])
 {
-    /**
-     * @description: change the topdir where backup the file
-     * @param { the number of parameters, the dir where backup the file } 
-     * @return: not a function, a statement of operations
-     * @author: Kevin Liu
-     */
-    if( argc == 2 )
-    {
-        if( (chdir(argv[1]) < 0 ) )
-            err_sys("change dir error");
-    }
 
     /**
      * @description: read the entile backup document
@@ -34,6 +23,20 @@ int main(int argc, char const *argv[])
     int fd;
     if((fd = open("./BackUp.txt",FILE_MODE,0777)) < 0)
         err_sys("open Backup.txt error");
+
+    /**
+     * @description: change the topdir where backup the file
+     * @param { the number of parameters, the dir where backup the file } 
+     * @return: not a function, a statement of operations
+     * @author: Kevin Liu
+     */
+    if( argc == 2 )
+    {
+        if( (chdir(argv[1]) < 0 ) )
+            err_sys("change dir error");
+    }
+
+    
     if(read( fd, Document,statbuf.st_size) < 0)
         err_sys("read error");
 
@@ -147,8 +150,10 @@ int main(int argc, char const *argv[])
     }
 
     char** name    = (char**)malloc((*linenumber)*sizeof(char*));
+    char ** content = (char **)malloc((*linenumber)*sizeof(char *));
     for(int i = 0;i < (*linenumber);i++)
     {
+        content[i] = (char*)malloc(Fsize[i]*sizeof(char));
         name[i]    = (char*)malloc(FnameLen[i]*sizeof(char));
     }
 
@@ -156,93 +161,21 @@ int main(int argc, char const *argv[])
     getname(ALLines,name,linenumber,Fnamebegin,FnameLen);
 
     void getcontent(char ** ALLines, char ** content, int * linenumber, unsigned short * ContentBegin,unsigned short * Fsize,unsigned short * Ftype);
-    // getcontent(ALLines,content,linenumber,ContentBegin,Fsize,Ftype);
-
-
-    char ** content = (char **)malloc((*linenumber)*sizeof(char *));
-    content[(*linenumber)-1] = (char*)malloc(sizeof(char));
-    content[(*linenumber)-2] = (char*)malloc(sizeof(char));
-    for(int i = 0; i < (*linenumber) -2; i ++)
-    {
-        content[i] = (char*)malloc(Fsize[i]*sizeof(char));
-        if(Ftype[i]==0)
-        {
-            int temp = 0;
-            for(int j = ContentBegin[i];j < ContentBegin[i] + Fsize[i]; j++)
-            {
-                content[i][temp++] = ALLines[i][j];//一旦加了这行就出现内存错误
-                // free(ALLines[i]);
-                // ALLines[i] = NULL;
-            }
-            // content[i][Fsize[i]]= '\0';
-            printf("%d\t%s\n",i+1,content[i]);
-        }
-        if(Ftype[i]==1)
-        {
-            content[i][0] = '\0';
-            printf("%d\t%s\n",i+1,content[i]);
-        }
-    }
-
+    getcontent(ALLines,content,linenumber,ContentBegin,Fsize,Ftype);
     free(ALLines);
     ALLines=NULL;
+    name[0][FnameLen[0]] = '\0';
+
+    if(mkdir(name[0],0777) < 0)
+        err_sys("mkdir error");
+
+    if(chdir(name[0]) < 0)
+        err_sys("chdir error");
 
 
+    void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** content,unsigned short * Fsize,char ** Mode,char ** name);
+    back(Ftype, indent,linenumber,content,Fsize,Mode,name);
 
-
-
-
-
-
-
-
-
-
-
-    for(int i = 1; i < (*linenumber) - 2;i++)
-    {
-        printf("%d\t%s\n",i+1,name[i]);
-        if(Ftype[i] == 0)
-        {
-            // printf("%d\t%s",i + 1,content[i]);
-        }
-        if(indent[i][2] == 1)
-        {
-            if(Ftype[i]==1)
-            {
-                
-            }
-            else
-            {
-                /* code */
-            }
-            
-        }
-        else if(indent[i][2] == 0)
-        {
-            if(Ftype[i]==1)
-            {
-
-            }
-            else
-            {
-                /* code */
-            }
-        }
-        else
-        {
-            if(Ftype[i]==1)
-            {
-
-            }
-            else
-            {
-                /* code */
-            }
-            
-        }
-        
-    }
 
     return 0;
 }
@@ -599,5 +532,94 @@ void getname(char ** ALLines, char ** name,int * linenumber,int * Fnamebegin,int
 
 void getcontent(char ** ALLines, char ** content, int * linenumber, unsigned short * ContentBegin,unsigned short * Fsize,unsigned short * Ftype)
 {
-    
+    content[(*linenumber)-1] = (char*)malloc(sizeof(char));
+    content[(*linenumber)-2] = (char*)malloc(sizeof(char));
+    for(int i = 0; i < (*linenumber) -2; i ++)
+    {
+        if(Ftype[i]==0)
+        {
+            int temp = 0;
+            for(int j = ContentBegin[i];j < ContentBegin[i] + Fsize[i]; j++)
+            {
+                content[i][temp++] = ALLines[i][j];//一旦加了这行就出现内存错误
+                // free(ALLines[i]);
+                // ALLines[i] = NULL;
+            }
+            // content[i][Fsize[i]]= '\0';
+            // printf("%d\t%s\n",i+1,content[i]);
+        }
+        if(Ftype[i]==1)
+        {
+            content[i][0] = '\0';
+            // printf("%d\t%s\n",i+1,content[i]);
+        }
+    }   
+}
+
+
+
+void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** content,unsigned short * Fsize,char ** Mode,char ** name)
+{
+     for(int i = 1; i < (*linenumber) - 2;i++)
+    {
+        if(indent[i][2] == 1)
+        {
+            if(Ftype[i]==1)
+            {
+                int mode;
+                sscanf(Mode[i],"%d",&mode);
+                chdir(name[i-1]);
+                mkdir(name[i],mode);
+            }
+            else
+            {
+                int mode;
+                sscanf(Mode[i],"%d",&mode);
+                chdir(name[i-1]);
+                int fd;
+                fd = creat(name[i],mode);
+                write(fd,content[i],Fsize[i]);
+                close(fd);
+            }
+        }
+        else if(indent[i][2] == 0)
+        {
+            if(Ftype[i]==1)
+            {
+                int mode;
+                sscanf(Mode[i],"%d",&mode);
+                mkdir(name[i],mode);
+            }
+            else
+            {
+                int mode;
+                sscanf(Mode[i],"%d",&mode);
+                int fd;
+                fd = creat(name[i],mode);
+                write(fd,content[i],Fsize[i]);
+                close(fd);
+            }
+        }
+        else
+        {
+            if(Ftype[i]==1)
+            {
+                int mode;
+                sscanf(Mode[i],"%d",&mode);
+                chdir("..");
+                mkdir(name[i],mode);
+            }
+            else
+            {
+                int mode;
+                sscanf(Mode[i],"%d",&mode);
+                chdir("..");
+                int fd;
+                fd = creat(name[i],mode);
+                write(fd,content[i],Fsize[i]);
+                close(fd);
+            }
+            
+        }    
+    }
 }
