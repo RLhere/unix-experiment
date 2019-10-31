@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-31 17:52:57
+ * @LastEditTime: 2019-10-31 19:37:56
  */
 #include "apue.h"
 
@@ -173,6 +173,7 @@ int main(int argc, char const *argv[])
         err_sys("chdir error");
 
 
+    indent[1][2] = 1;
     void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** content,unsigned short * Fsize,char ** Mode,char ** name);
     back(Ftype, indent,linenumber,content,Fsize,Mode,name);
 
@@ -571,7 +572,7 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
                 chdir(name[i-1]);
                 mkdir(name[i],mode);
             }
-            else
+            else if(Ftype[i]==0)
             {
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
@@ -590,7 +591,7 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
                 sscanf(Mode[i],"%d",&mode);
                 mkdir(name[i],mode);
             }
-            else
+            else if(Ftype[i]==0)
             {
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
@@ -600,7 +601,7 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
                 close(fd);
             }
         }
-        else
+        else if(indent[i][2] == -1)
         {
             if(Ftype[i]==1)
             {
@@ -609,7 +610,7 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
                 chdir("..");
                 mkdir(name[i],mode);
             }
-            else
+            else if(Ftype[i]==0)
             {
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
@@ -618,8 +619,15 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
                 fd = creat(name[i],mode);
                 write(fd,content[i],Fsize[i]);
                 close(fd);
-            }
-            
-        }    
+            }    
+        }
+        else if(indent[i][2]== -2)
+        {
+            chdir("..");
+            chdir("..");
+            int mode;
+            sscanf(Mode[i],"%d",&mode);
+            mkdir(name[i],mode);
+        }
     }
 }
