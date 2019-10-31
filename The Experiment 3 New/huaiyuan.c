@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-10-29 22:52:21
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-10-31 19:37:56
+ * @LastEditTime: 2019-11-01 01:00:57
  */
 #include "apue.h"
 
@@ -174,8 +174,8 @@ int main(int argc, char const *argv[])
 
 
     indent[1][2] = 1;
-    void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** content,unsigned short * Fsize,char ** Mode,char ** name);
-    back(Ftype, indent,linenumber,content,Fsize,Mode,name);
+    void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** content,unsigned short * Fsize,char ** Mode,char ** name,char ** Uid,char ** Gid);
+    back(Ftype, indent,linenumber,content,Fsize,Mode,name,Uid,Gid);
 
 
     return 0;
@@ -559,7 +559,7 @@ void getcontent(char ** ALLines, char ** content, int * linenumber, unsigned sho
 
 
 
-void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** content,unsigned short * Fsize,char ** Mode,char ** name)
+void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** content,unsigned short * Fsize,char ** Mode,char ** name,char ** Uid,char ** Gid)
 {
      for(int i = 1; i < (*linenumber) - 2;i++)
     {
@@ -567,6 +567,12 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
         {
             if(Ftype[i]==1)
             {
+                int uid;
+                int gid;
+                sscanf(Gid[i],"%d",&gid);
+                sscanf(Uid[i],"%d",&uid);
+                setuid(uid);
+                setgid(gid);
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
                 chdir(name[i-1]);
@@ -574,6 +580,12 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
             }
             else if(Ftype[i]==0)
             {
+                int uid;
+                int gid;
+                sscanf(Gid[i],"%d",&gid);
+                sscanf(Uid[i],"%d",&uid);
+                setuid(uid);
+                setgid(gid);
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
                 chdir(name[i-1]);
@@ -587,12 +599,24 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
         {
             if(Ftype[i]==1)
             {
+                int uid;
+                int gid;
+                sscanf(Gid[i],"%d",&gid);
+                sscanf(Uid[i],"%d",&uid);
+                setuid(uid);
+                setgid(gid);    
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
                 mkdir(name[i],mode);
             }
             else if(Ftype[i]==0)
             {
+                int uid;
+                int gid;
+                sscanf(Gid[i],"%d",&gid);
+                sscanf(Uid[i],"%d",&uid);
+                setuid(uid);
+                setgid(gid);    
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
                 int fd;
@@ -605,6 +629,12 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
         {
             if(Ftype[i]==1)
             {
+                int uid;
+                int gid;
+                sscanf(Gid[i],"%d",&gid);
+                sscanf(Uid[i],"%d",&uid);
+                setuid(uid);
+                setgid(gid);
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
                 chdir("..");
@@ -612,6 +642,12 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
             }
             else if(Ftype[i]==0)
             {
+                int uid;
+                int gid;
+                sscanf(Gid[i],"%d",&gid);
+                sscanf(Uid[i],"%d",&uid);
+                setuid(uid);
+                setgid(gid);
                 int mode;
                 sscanf(Mode[i],"%d",&mode);
                 chdir("..");
@@ -623,6 +659,12 @@ void back(unsigned short * Ftype,short ** indent, int * linenumber,char ** conte
         }
         else if(indent[i][2]== -2)
         {
+            int uid;
+            int gid;
+            sscanf(Gid[i],"%d",&gid);
+            sscanf(Uid[i],"%d",&uid);
+            setuid(uid);
+            setgid(gid);
             chdir("..");
             chdir("..");
             int mode;
