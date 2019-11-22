@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stat.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "apue.h": "c"
     }
 }
