@@ -4,7 +4,7 @@
  * @Author: Kevin Liu
  * @Date: 2019-11-22 10:51:48
  * @LastEditors: Kevin Liu
- * @LastEditTime: 2019-11-22 18:15:53
+ * @LastEditTime: 2019-11-22 18:49:28
  */
 #include "apue.h"
 #define S_FIFO_NAME "/tmp/servercreatedfifo"
@@ -13,14 +13,14 @@ int main(int argc, char const *argv[])
 {
     int fd;
     int open_mode = 0;
+    void handler(char arg[10]);
     char buf[BUFFSIZE];
     char C_FIFO_NAME[10];
 
     umask(0);
     sprintf(C_FIFO_NAME,"%d",getpid());
-    printf("%s",C_FIFO_NAME);
     mkfifo(C_FIFO_NAME,0777);
-    scanf(C_FIFO_NAME,&buf);
+    sscanf(C_FIFO_NAME,"%s",&buf);
     
     //把自己这个进程的进程号写到well-known fifo
     open_mode |= O_WRONLY;
@@ -40,5 +40,13 @@ int main(int argc, char const *argv[])
     printf("%s\n",buf);
     close(fd);
 
+    signal(SIGINT,handler);
+
     exit(0);
+}
+
+void handler(char arg[10])
+{
+    unlink(S_FIFO_NAME);
+    unlink(arg);
 }
